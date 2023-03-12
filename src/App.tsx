@@ -31,6 +31,9 @@ export default function App() {
   const todos: Todo[] = useTodoStore.getState().todos;
 
   useEffect(() => {
+    document.title = "Todo List With Zustand";
+  }, []);
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.value = "";
       inputRef.current.focus();

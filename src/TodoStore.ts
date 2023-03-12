@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { persist  } from "zustand/middleware";
 import Todo from "./model/Todo";
 import { v4 } from "uuid";
 
@@ -14,9 +14,9 @@ export type TodoStore = {
   getCountIncompleted: () => number;
 };
 
-const useTodoStore: any = create<TodoStore>(
+const useTodoStore: any = create<TodoStore>()(
   persist(
-    devtools((set) => ({
+    (set, get) => ({
       todos: [],
       addTodo: (title: string) =>
         set((state) => ({
@@ -32,17 +32,13 @@ const useTodoStore: any = create<TodoStore>(
             todo.id === id ? { ...todo, completed: !todo.completed } : todo
           ),
         })),
-      removeAll: () => set({ todos: [] }),
-      getCountAll: () => useTodoStore.getState().todos.length,
+      removeAll: () => set({ todos: [] }, true),
+      getCountAll: () => get().todos.length,
       getCountCompleted: () =>
-        useTodoStore
-          .getState()
-          .todos.filter((todo: Todo) => todo.completed === true).length,
+        get().todos.filter((todo: Todo) => todo.completed === true).length,
       getCountIncompleted: () =>
-        useTodoStore
-          .getState()
-          .todos.filter((todo: Todo) => todo.completed === false).length,
-    })),
+        get().todos.filter((todo: Todo) => todo.completed === false).length,
+    }),
     {
       name: "todo-list",
     }
