@@ -119,6 +119,7 @@ export default function App() {
           aria-label="title"
           icon={<IconLayoutList />}
           onChange={handleTitleChange}
+          onKeyPress={(e) => e.key === "Enter" && addTodo(title)}
           ref={inputRef}
         ></Input>
         <Button
